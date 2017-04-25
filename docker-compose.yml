@@ -1,15 +1,17 @@
 version: "2"
 services:
   lyra:
-    image: elixir:1.4.2-slim
+    image: elixir:1.4.2
+# elixir:1.4.2-slim did not have make and other build dependencies
     networks:
       - chord
     volumes:
       - .:/lyra
     working_dir: /lyra
-    command: ["mix local.hex --force && mix deps.get "]
-    # mix local.rebar --force
-    # mix deps.compile proper
+    command: ["mix local.rebar --force && mix local.hex --force && mix deps.get"] 
+# You can append these to command to run tests locally with docker-compose rather than inside Travis CI
+# && mix test && mix property && [ -d .dialyzer ] || mkdir .dialyzer && mix dialyzer && mix credo --strict && /bin/bash"]
+    
     entrypoint: /bin/bash -c
     stdin_open: true
     tty: true
